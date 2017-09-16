@@ -8,10 +8,12 @@ volumes:
   caddy: {}
 
   steemprojectscom_static:
-      driver: local
+    external:
+      name: steemprojectscom_static
 
   steemprojectscom_media:
-      driver: local
+    external:
+      name: steemprojectscom_media
 
 services:
   caddy:
@@ -26,5 +28,6 @@ services:
     external_links:
       - steemprojectscom_django-a_1:steemprojectscom_django-a
       - steemprojectscom_django-b_1:steemprojectscom_django-b
+      - exampledjango_django_1:exampledjango_django
     networks:
       - gallifrey

@@ -30,3 +30,14 @@ alpha.steemprojects.com/media {
     header / Cache-Control "max-age=2592000"
     gzip
 }
+
+social-auth-steemconnect-demo.krzysztofszumny.pl {
+    proxy / exampledjango_django:5000 {
+        header_upstream Host {host}
+        header_upstream X-Real-IP {remote}
+        header_upstream X-Forwarded-Proto {scheme}
+    }
+    log stdout
+    errors stdout
+    gzip
+}
