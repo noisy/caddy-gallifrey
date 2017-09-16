@@ -1,22 +1,21 @@
 version: '2'
 
+networks:
+  gallifrey:
+    external: true
+
 volumes:
   caddy: {}
 
   steemprojectscom_static:
-      name: steemprojectscom_static
       driver: local
 
   steemprojectscom_media:
-      name: steemprojectscom_media
       driver: local
 
 services:
   caddy:
-    build: ./compose/caddy
-    depends_on:
-      - django-a
-      - django-b
+    build: .
     volumes:
       - steemprojectscom_static:/data/steemprojectscom_static
       - steemprojectscom_media:/data/steemprojectscom_media
@@ -24,7 +23,8 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    env_file: .env
-  external_links:
-   - steemprojectscom_django-a_1
-   - steemprojectscom_django-b_1
+    external_links:
+      - steemprojectscom_django-a_1:steemprojectscom_django-a
+      - steemprojectscom_django-b_1:steemprojectscom_django-b
+    networks:
+      - gallifrey

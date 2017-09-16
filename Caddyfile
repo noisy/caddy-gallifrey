@@ -3,7 +3,7 @@ www.alpha.steemprojects.com {
 }
 
 alpha.steemprojects.com {
-    proxy / steemprojectscom_django-a_1:5000 steemprojectscom_django-b_1:5000 {
+    proxy / steemprojectscom_django-a:5000 steemprojectscom_django-b:5000 {
         health_check /health_check/
         health_check_interval 1s
         health_check_timeout 5s
