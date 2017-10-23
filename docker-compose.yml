@@ -7,6 +7,7 @@ networks:
 volumes:
   caddy: {}
 
+  # Production
   steemprojectscom_static:
     external:
       name: steemprojectscom_static
@@ -15,12 +16,23 @@ volumes:
     external:
       name: steemprojectscom_media
 
+  # Staging
+  stagingsteemprojectscom_static:
+    external:
+      name: stagingsteemprojectscom_static
+
+  stagingsteemprojectscom_media:
+    external:
+      name: stagingsteemprojectscom_media
+
 services:
   caddy:
     build: .
     volumes:
       - steemprojectscom_static:/data/steemprojectscom_static
       - steemprojectscom_media:/data/steemprojectscom_media
+      - stagingsteemprojectscom_static:/data/stagingsteemprojectscom_static
+      - stagingsteemprojectscom_media:/data/stagingsteemprojectscom_media
       - caddy:/root/.caddy
     ports:
       - "80:80"
@@ -28,6 +40,8 @@ services:
     external_links:
       - steemprojectscom_django-a_1:steemprojectscom_django-a
       - steemprojectscom_django-b_1:steemprojectscom_django-b
+      - stagingsteemprojectscom_django-a_1:stagingsteemprojectscom_django-a
+      - stagingsteemprojectscom_django-b_1:stagingsteemprojectscom_django-b
       - exampledjango_django_1:exampledjango_django
     networks:
       - gallifrey

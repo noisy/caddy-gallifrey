@@ -1,3 +1,5 @@
+# PRODUCTION ################################################################################
+
 www.alpha.steemprojects.com {
     redir https://alpha.steemprojects.com
 }
@@ -30,6 +32,44 @@ alpha.steemprojects.com/media {
     header / Cache-Control "max-age=2592000"
     gzip
 }
+
+# STAGING ###################################################################################
+
+www.staging.steemprojects.com {
+    redir https://staging.steemprojects.com
+}
+
+staging.steemprojects.com {
+    proxy / stagingsteemprojectscom_django-a:5000 stagingsteemprojectscom_django-b:5000 {
+        health_check /health_check/
+        health_check_interval 1s
+        health_check_timeout 5s
+        fail_timeout 5s
+        policy round_robin
+        header_upstream Host {host}
+        header_upstream X-Real-IP {remote}
+        header_upstream X-Forwarded-Proto {scheme}
+    }
+    ratelimit / 10 10 second
+    log stdout
+    errors stdout
+    gzip
+}
+
+staging.steemprojects.com/static {
+    root /data/stagingsteemprojectscom_static
+    header / Cache-Control "max-age=2592000"
+    gzip
+}
+
+staging.steemprojects.com/media {
+    root /data/stagingsteemprojectscom_media
+    header / Cache-Control "max-age=2592000"
+    gzip
+}
+
+
+# OTHER #####################################################################################
 
 social-auth-steemconnect-demo.krzysztofszumny.pl {
     proxy / exampledjango_django:5000 {
