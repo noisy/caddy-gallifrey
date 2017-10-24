@@ -1,6 +1,12 @@
-version: '2'
+version: '3'
 
 networks:
+  steemprojectscom_default:
+    external: true
+  stagingsteemprojectscom_default:
+    external: true
+  daleksteemprojectscom_default:
+    external: true
   gallifrey:
     external: true
 
@@ -25,6 +31,15 @@ volumes:
     external:
       name: stagingsteemprojectscom_media
 
+  # Dalek
+  daleksteemprojectscom_static:
+    external:
+      name: daleksteemprojectscom_static
+
+  daleksteemprojectscom_media:
+    external:
+      name: daleksteemprojectscom_media
+
 services:
   caddy:
     build: .
@@ -33,6 +48,8 @@ services:
       - steemprojectscom_media:/data/steemprojectscom_media
       - stagingsteemprojectscom_static:/data/stagingsteemprojectscom_static
       - stagingsteemprojectscom_media:/data/stagingsteemprojectscom_media
+      - daleksteemprojectscom_static:/data/daleksteemprojectscom_static
+      - daleksteemprojectscom_media:/data/daleksteemprojectscom_media
       - caddy:/root/.caddy
     ports:
       - "80:80"
@@ -42,6 +59,11 @@ services:
       - steemprojectscom_django-b_1:steemprojectscom_django-b
       - stagingsteemprojectscom_django-a_1:stagingsteemprojectscom_django-a
       - stagingsteemprojectscom_django-b_1:stagingsteemprojectscom_django-b
+      - daleksteemprojectscom_django-a_1:daleksteemprojectscom_django-a
+      - daleksteemprojectscom_django-b_1:daleksteemprojectscom_django-b
       - exampledjango_django_1:exampledjango_django
     networks:
+      - steemprojectscom_default
+      - stagingsteemprojectscom_default
+      - daleksteemprojectscom_default
       - gallifrey

@@ -21,4 +21,5 @@ WORKDIR /srv
 COPY Caddyfile /etc/Caddyfile
 
 ENTRYPOINT ["/usr/bin/caddy"]
+# CMD ["--conf", "/etc/Caddyfile", "-ca", "https://acme-staging.api.letsencrypt.org/directory", "--log", "stdout"]
 CMD ["--conf", "/etc/Caddyfile", "--log", "stdout"]

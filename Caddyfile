@@ -1,10 +1,10 @@
 # PRODUCTION ################################################################################
 
-www.alpha.steemprojects.com {
-    redir https://alpha.steemprojects.com
+www.steemprojects.com {
+    redir https://steemprojects.com
 }
 
-alpha.steemprojects.com {
+steemprojects.com {
     proxy / steemprojectscom_django-a:5000 steemprojectscom_django-b:5000 {
         health_check /health_check/
         health_check_interval 1s
@@ -21,13 +21,13 @@ alpha.steemprojects.com {
     gzip
 }
 
-alpha.steemprojects.com/static {
+steemprojects.com/static {
     root /data/steemprojectscom_static
     header / Cache-Control "max-age=2592000"
     gzip
 }
 
-alpha.steemprojects.com/media {
+steemprojects.com/media {
     root /data/steemprojectscom_media
     header / Cache-Control "max-age=2592000"
     gzip
@@ -64,6 +64,42 @@ staging.steemprojects.com/static {
 
 staging.steemprojects.com/media {
     root /data/stagingsteemprojectscom_media
+    header / Cache-Control "max-age=2592000"
+    gzip
+}
+
+
+# DALEK #####################################################################################
+
+www.dalek.steemprojects.com {
+    redir https://dalek.steemprojects.com
+}
+
+dalek.steemprojects.com {
+    proxy / daleksteemprojectscom_django-a:5000 daleksteemprojectscom_django-b:5000 {
+        health_check /health_check/
+        health_check_interval 1s
+        health_check_timeout 5s
+        fail_timeout 5s
+        policy round_robin
+        header_upstream Host {host}
+        header_upstream X-Real-IP {remote}
+        header_upstream X-Forwarded-Proto {scheme}
+    }
+    ratelimit / 10 10 second
+    log stdout
+    errors stdout
+    gzip
+}
+
+dalek.steemprojects.com/static {
+    root /data/daleksteemprojectscom_static
+    header / Cache-Control "max-age=2592000"
+    gzip
+}
+
+dalek.steemprojects.com/media {
+    root /data/daleksteemprojectscom_media
     header / Cache-Control "max-age=2592000"
     gzip
 }
