@@ -1,25 +1,51 @@
-FROM alpine:3.5
+#
+# Builder
+#
+FROM abiosoft/caddy:builder as builder
+
+ARG version="0.11.0"
+ARG plugins="git,filemanager,cors,realip,expires,cache,ratelimit"
+
+# process wrapper
+RUN go get -v github.com/abiosoft/parent
+
+RUN VERSION=${version} PLUGINS=${plugins} ENABLE_TELEMETRY=false /bin/sh /usr/bin/builder.sh
+
+#
+# Final stage
+#
+FROM alpine:3.7
 LABEL maintainer "Abiola Ibrahim <abiola89@gmail.com>"
 
-LABEL caddy_version="0.10.3" architecture="amd64"
+ARG version="0.11.0"
+LABEL caddy_version="$version"
 
-ARG plugins=http.ratelimit
+# Let's Encrypt Agreement
+ENV ACME_AGREE="false"
 
-RUN apk add --no-cache openssh-client git tar curl
+# Telemetry Stats
+ENV ENABLE_TELEMETRY="false"
 
-RUN curl --silent --show-error --fail --location \
-      --header "Accept: application/tar+gzip, application/x-gzip, application/octet-stream" -o - \
-      "https://caddyserver.com/download/linux/amd64?plugins=${plugins}" \
-    | tar --no-same-owner -C /usr/bin/ -xz caddy \
- && chmod 0755 /usr/bin/caddy \
- && /usr/bin/caddy -version
+RUN apk add --no-cache openssh-client git
+
+# install caddy
+COPY --from=builder /install/caddy /usr/bin/caddy
+
+# validate install
+RUN /usr/bin/caddy -version
+RUN /usr/bin/caddy -plugins
 
 EXPOSE 80 443 2015
-VOLUME /root/.caddy
+VOLUME /root/.caddy /srv
 WORKDIR /srv
 
 COPY Caddyfile /etc/Caddyfile
+COPY index.html /srv/index.html
 
-ENTRYPOINT ["/usr/bin/caddy"]
-# CMD ["--conf", "/etc/Caddyfile", "-ca", "https://acme-staging.api.letsencrypt.org/directory", "--log", "stdout"]
-CMD ["--conf", "/etc/Caddyfile", "--log", "stdout"]
+# install process wrapper
+COPY --from=builder /go/bin/parent /bin/parent
+
+ENTRYPOINT ["/bin/parent", "caddy"]
+CMD ["--conf", "/etc/Caddyfile", "--log", "stdout", "--agree=$ACME_AGREE"]
+
+COPY ./Caddyfile /etc/Caddyfile
