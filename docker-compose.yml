@@ -68,8 +68,8 @@ services:
       - "80:80"
       - "443:443"
     external_links:
-      - hiveprojectsio_django-a_1:steemprojectscom_django-a
-      - hiveprojectsio_django-b_1:steemprojectscom_django-b
+      - hiveprojectsio_django-a_1:hiveprojectsio_django-a
+      - hiveprojectsio_django-b_1:hiveprojectsio_django-b
       - steemprojectscom_django-a_1:steemprojectscom_django-a
       - steemprojectscom_django-b_1:steemprojectscom_django-b
       - stagingsteemprojectscom_django-a_1:stagingsteemprojectscom_django-a
