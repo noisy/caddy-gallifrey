@@ -44,28 +44,6 @@ steemprojects.com/media {
     header / Cache-Control "max-age=2592000"
     gzip
 }
-############################################
-
-# EOS Signup, eossignup_production_django
-
-www.signup.eosprojects.org {
-    redir https://signup.eosprojects.org
-    tls noisy.pl@gmail.com {
-      ca https://acme-staging.api.letsencrypt.org/directory
-    }
-}
-
-signup.eosprojects.org {
-    proxy / eossignup_production_django:5000 {
-        header_upstream Host {host}
-        header_upstream X-Real-IP {remote}
-        header_upstream X-Forwarded-Proto {scheme}
-    }
-    log stdout
-    errors stdout
-    gzip
-}
-
 # STAGING ###################################################################################
 
 www.staging.steemprojects.com {
@@ -160,101 +138,6 @@ dalek.steemprojects.com/media {
     header / Cache-Control "max-age=2592000"
     gzip
 }
-
-# EOS PRODUCTION ################################################################################
-
-www.eosprojects.org {
-    redir https://eosprojects.org
-#    tls noisy.pl@gmail.com {
-#      ca https://acme-staging.api.letsencrypt.org/directory
-#    }
-}
-
-eosprojects.org {
-    proxy / eosprojectsorg_django-a:5000 eosprojectsorg_django-b:5000 {
-        health_check /health_check/
-        health_check_interval 1s
-        health_check_timeout 5s
-        fail_timeout 5s
-        policy round_robin
-        header_upstream Host {host}
-        header_upstream X-Real-IP {remote}
-        header_upstream X-Forwarded-Proto {scheme}
-    }
-#    tls noisy.pl@gmail.com {
-#      ca https://acme-staging.api.letsencrypt.org/directory
-#    }
-    ratelimit / 10 10 second
-    log stdout
-    errors stdout
-    gzip
-}
-
-eosprojects.org/static {
-#    tls noisy.pl@gmail.com {
-#      ca https://acme-staging.api.letsencrypt.org/directory
-#    }
-    root /data/eosprojectsorg_static
-    header / Cache-Control "max-age=2592000"
-    gzip
-}
-
-eosprojects.org/media {
-#    tls noisy.pl@gmail.com {
-#      ca https://acme-staging.api.letsencrypt.org/directory
-#    }
-    root /data/eosprojectsorg_media
-    header / Cache-Control "max-age=2592000"
-    gzip
-}
-
-# EOS STAGING ################################################################################
-
-www.staging.eosprojects.org {
-    redir https://staging.eosprojects.org
-#    tls noisy.pl@gmail.com {
-#      ca https://acme-staging.api.letsencrypt.org/directory
-#    }
-}
-
-staging.eosprojects.org {
-    proxy / stagingeosprojectsorg_django-a:5000 stagingeosprojectsorg_django-b:5000 {
-        health_check /health_check/
-        health_check_interval 1s
-        health_check_timeout 5s
-        fail_timeout 5s
-        policy round_robin
-        header_upstream Host {host}
-        header_upstream X-Real-IP {remote}
-        header_upstream X-Forwarded-Proto {scheme}
-    }
-#    tls noisy.pl@gmail.com {
-#      ca https://acme-staging.api.letsencrypt.org/directory
-#    }
-    ratelimit / 10 10 second
-    log stdout
-    errors stdout
-    gzip
-}
-
-staging.eosprojects.org/static {
-#    tls noisy.pl@gmail.com {
-#      ca https://acme-staging.api.letsencrypt.org/directory
-#    }
-    root /data/stagingeosprojectsorg_static
-    header / Cache-Control "max-age=2592000"
-    gzip
-}
-
-staging.eosprojects.org/media {
-#    tls noisy.pl@gmail.com {
-#      ca https://acme-staging.api.letsencrypt.org/directory
-#    }
-    root /data/stagingeosprojectsorg_media
-    header / Cache-Control "max-age=2592000"
-    gzip
-}
-
 
 # OTHER #####################################################################################
 

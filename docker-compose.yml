@@ -9,12 +9,6 @@ networks:
     external: true
   gallifrey:
     external: true
-  eosprojectsorg_default:
-    external: true
-  stagingeosprojectsorg_default:
-    external: true
-  eossignup_default:
-    external: true
 
 volumes:
   caddy: {}
@@ -46,24 +40,6 @@ volumes:
     external:
       name: daleksteemprojectscom_media
 
-  # Production
-  eosprojectsorg_static:
-    external:
-      name: eosprojectsorg_static
-
-  eosprojectsorg_media:
-    external:
-      name: eosprojectsorg_media
-
-  # Staging
-  stagingeosprojectsorg_static:
-    external:
-      name: stagingeosprojectsorg_static
-
-  stagingeosprojectsorg_media:
-    external:
-      name: stagingeosprojectsorg_media
-
 services:
   caddy:
     build: .
@@ -75,10 +51,6 @@ services:
       - daleksteemprojectscom_static:/data/daleksteemprojectscom_static
       - daleksteemprojectscom_media:/data/daleksteemprojectscom_media
       - caddy:/root/.caddy
-      - eosprojectsorg_static:/data/eosprojectsorg_static
-      - eosprojectsorg_media:/data/eosprojectsorg_media
-      - stagingeosprojectsorg_static:/data/stagingeosprojectsorg_static
-      - stagingeosprojectsorg_media:/data/stagingeosprojectsorg_media
     ports:
       - "80:80"
       - "443:443"
@@ -89,18 +61,10 @@ services:
       - stagingsteemprojectscom_django-b_1:stagingsteemprojectscom_django-b
       - daleksteemprojectscom_django-a_1:daleksteemprojectscom_django-a
       - daleksteemprojectscom_django-b_1:daleksteemprojectscom_django-b
-      - eosprojectsorg_django-a_1:eosprojectsorg_django-a
-      - eosprojectsorg_django-b_1:eosprojectsorg_django-b
-      - stagingeosprojectsorg_django-a_1:stagingeosprojectsorg_django-a
-      - stagingeosprojectsorg_django-b_1:stagingeosprojectsorg_django-b
       - exampledjango_django_1:exampledjango_django
-      - eossignup_production_django:eossignup_production_django
     networks:
       - steemprojectscom_default
       - stagingsteemprojectscom_default
       - daleksteemprojectscom_default
-      - eosprojectsorg_default
-      - stagingeosprojectsorg_default
       - gallifrey
-      - eossignup_default
 
