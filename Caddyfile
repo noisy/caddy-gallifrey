@@ -1,5 +1,52 @@
 # PRODUCTION ################################################################################
 
+www.hiveprojects.io {
+    redir https://hiveprojects.io
+#    tls noisy.pl@gmail.com {
+#      ca https://acme-staging.api.letsencrypt.org/directory
+#    }
+}
+
+hiveprojects.io {
+    proxy / hiveprojectsio_django-a:5000 hiveprojectsio_django-b:5000 {
+        health_check /health_check/
+        health_check_interval 1s
+        health_check_timeout 5s
+        fail_timeout 5s
+        policy round_robin
+        header_upstream Host {host}
+        header_upstream X-Real-IP {remote}
+        header_upstream X-Forwarded-Proto {scheme}
+    }
+#    tls noisy.pl@gmail.com {
+#      ca https://acme-staging.api.letsencrypt.org/directory
+#    }
+    ratelimit / 10 10 second
+    log stdout
+    errors stdout
+    gzip
+}
+
+hiveprojects.io/static {
+#    tls noisy.pl@gmail.com {
+#      ca https://acme-staging.api.letsencrypt.org/directory
+#    }
+    root /data/hiveprojectsio_static
+    header / Cache-Control "max-age=2592000"
+    gzip
+}
+
+hiveprojects.io/media {
+#    tls noisy.pl@gmail.com {
+#      ca https://acme-staging.api.letsencrypt.org/directory
+#    }
+    root /data/hiveprojectsio_media
+    header / Cache-Control "max-age=2592000"
+    gzip
+}
+
+# PRODUCTION ################################################################################
+
 www.steemprojects.com {
     redir https://steemprojects.com
 #    tls noisy.pl@gmail.com {
@@ -154,4 +201,3 @@ social-auth-steemconnect-demo.krzysztofszumny.pl {
     errors stdout
     gzip
 }
-

@@ -1,6 +1,8 @@
-version: '3'
+version: "3"
 
 networks:
+  hiveprojectsio_default:
+    external: true
   steemprojectscom_default:
     external: true
   stagingsteemprojectscom_default:
@@ -12,6 +14,15 @@ networks:
 
 volumes:
   caddy: {}
+
+  # Production
+  hiveprojectsio_static:
+    external:
+      name: hiveprojectsio_static
+
+  hiveprojectsio_media:
+    external:
+      name: hiveprojectsio_media
 
   # Production
   steemprojectscom_static:
@@ -44,6 +55,8 @@ services:
   caddy:
     build: .
     volumes:
+      - hiveprojectsio_static:/data/hiveprojectsio_static
+      - hiveprojectsio_media:/data/hiveprojectsio_media
       - steemprojectscom_static:/data/steemprojectscom_static
       - steemprojectscom_media:/data/steemprojectscom_media
       - stagingsteemprojectscom_static:/data/stagingsteemprojectscom_static
@@ -55,6 +68,8 @@ services:
       - "80:80"
       - "443:443"
     external_links:
+      - hiveprojectsio_django-a_1:steemprojectscom_django-a
+      - hiveprojectsio_django-b_1:steemprojectscom_django-b
       - steemprojectscom_django-a_1:steemprojectscom_django-a
       - steemprojectscom_django-b_1:steemprojectscom_django-b
       - stagingsteemprojectscom_django-a_1:stagingsteemprojectscom_django-a
@@ -63,8 +78,8 @@ services:
       - daleksteemprojectscom_django-b_1:daleksteemprojectscom_django-b
       - exampledjango_django_1:exampledjango_django
     networks:
+      - hiveprojectsio_default
       - steemprojectscom_default
       - stagingsteemprojectscom_default
       - daleksteemprojectscom_default
       - gallifrey
-
